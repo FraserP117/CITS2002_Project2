@@ -94,7 +94,7 @@ void merge_output_and_tmp(char **tarfile_names) { // must eventually take: "ntar
   printf("\n");
   printf("the contents of output_dir: \n");
 
-  store_dir(output_dir);
+  store_dir_contents(output_dir);
   printf("\n");
 
   if (output_dir == NULL) {
@@ -114,7 +114,8 @@ void merge_output_and_tmp(char **tarfile_names) { // must eventually take: "ntar
     printf("\n");
     printf("the contents of tmp_dir: \n");
 
-    store_dir(tmp_dir);
+    // recursively calls itself for ever dir it finds inside the currnet tarfile:
+    store_dir_contents(tmp_dir);
     printf("\n");
 
     if (tmp_dir == NULL) {
@@ -175,118 +176,13 @@ void merge_output_and_tmp(char **tarfile_names) { // must eventually take: "ntar
     // this is a pointer to a "dirent" structure representing the next directory
     // entry in the directory stream pointed to by out_dir:
     // this will point to the call to readdir() for out_dir
-    if(output_dir == NULL) {
-      perror("\t\toutput_dir is NULL. \n"); // what is this "progname"?
-      exit(EXIT_FAILURE);
-    }
-
-    if (tmp_dir == NULL) {
-      printf("\t\ttmp_dir is NULL \n");
-    }
-
-    struct dirent *out_dir_dirent_pointer;
-    // this is the pointer to the contents of the output dir:
-    DIR *out_dir = opendir(output_dir); // Segmentation fault (core dumped)
-
-    if(out_dir == NULL) {
-      perror("\t\tout_dir was NULL. \n"); // what is this "progname"?
-      exit(EXIT_FAILURE);
-    }
-    // it appears that output_dir is null...
-
-    // this is a pointer to a "dirent" structure representing the next directory
-    // entry in the directory stream pointed to by tp_dir:
-    // this will point to the call to readdir() for otp_dir
-    printf("\tL 4\n");
-    fflush(stdout);
-    struct dirent *tmp_dir_dirent_pointer;
-    // this is the pointer to the contents of the tmporary dir:
-    printf("\tL 5\n");
-    fflush(stdout);
-    DIR *tp_dir = opendir(tmp_dir);
-
-    printf("\tL 6\n");
-    fflush(stdout);
-    out_dir_dirent_pointer = readdir(out_dir);
-    printf("\tL 7\n");
-    fflush(stdout);
-    tmp_dir_dirent_pointer = readdir(tp_dir);
-    printf("\tL 8\n");
-    fflush(stdout);
-
-    while(out_dir_dirent_pointer != NULL) {
-      printf("\tL 9\n");
-      fflush(stdout);
-      while(tmp_dir_dirent_pointer != NULL) {
-        printf("\tL 10\n");
-        fflush(stdout);
-        // to check if two versions of the same file:
-        // check if out_dir_dirent_pointer.d_name == tmp_dir_dirent_pointer.d_name
-        // may need:
-        // out_dir_dirent_pointer->d_name == tmp_dir_dirent_pointer->d_name
-        if (is_same_file(out_dir_dirent_pointer->d_name, tmp_dir_dirent_pointer->d_name)) {
-          printf("\tL 11\n");
-          fflush(stdout);
-          printf("\tthese files do have the same file path. \n");
-        } else {
-          printf("\tL 12\n");
-          fflush(stdout);
-          printf("\tthese files DO NOT have the same file path. \n");
-        }
-
-        break;
-      }
-
-      break;
-    }
-
-    printf("\tL 13\n");
-    fflush(stdout);
-    closedir(out_dir);
-    printf("\tL 14\n");
-    fflush(stdout);
-    closedir(tp_dir);
-
-
-    break;
-
-    // do the merging here
-
-    // tmp_dir = realloc(tmp_dir, sizeof make_a_temporary_dir(tarfile_names[i + 1]));
-    // char *tmp_dir = make_a_temporary_dir(tarfile_names[i + 1]);
-
-    // printf("Loc A \n");
-    // tmp_dir = make_a_temporary_dir(tarfile_names[i + 1]);
-    // if (output_dir == NULL) {
-    //   printf("tmp_dir is NULL \n");
-    // } else {
-    //   printf("%s \n", tmp_dir);
-    // }
 
 
 
-    // // ALL COMPARISONS HAPPEN HERE:
-    //
-    // /*
-    // init the output_dir and tmp_dir variables form their respective dirent and stat() structs
-    // we need:
-    //   - path_name
-    //   - mod_time
-    //   - file_size
-    // for each entry in the output_dir and the tmp_dir
-    // */
-    //
-    // /*
-    // use DIR *opendir(const char *dirname);
-    // to return a pointer for the output_dir and temp_dir (respectively)
-    //
-    // use these pointers to compare the contents of output_dir and temp_dir with
-    // te readdir() - struct dirent *readdir(DIR *dirp); - function.
-    // */
-    //
-    // // this is a pointer to a "dirent" structure representing the next directory
-    // // entry in the directory stream pointed to by out_dir:
-    // // this will point to the call to readdir() for out_dir
+
+
+
+
     // if(output_dir == NULL) {
     //   perror("\t\toutput_dir is NULL. \n"); // what is this "progname"?
     //   exit(EXIT_FAILURE);
@@ -304,52 +200,46 @@ void merge_output_and_tmp(char **tarfile_names) { // must eventually take: "ntar
     //   perror("\t\tout_dir was NULL. \n"); // what is this "progname"?
     //   exit(EXIT_FAILURE);
     // }
+    // // it appears that output_dir is null...
     //
     // // this is a pointer to a "dirent" structure representing the next directory
     // // entry in the directory stream pointed to by tp_dir:
     // // this will point to the call to readdir() for otp_dir
+    // printf("\tL 4\n");
+    // fflush(stdout);
     // struct dirent *tmp_dir_dirent_pointer;
     // // this is the pointer to the contents of the tmporary dir:
+    // printf("\tL 5\n");
+    // fflush(stdout);
     // DIR *tp_dir = opendir(tmp_dir);
     //
+    // printf("\tL 6\n");
+    // fflush(stdout);
+    // out_dir_dirent_pointer = readdir(out_dir);
+    // printf("\tL 7\n");
+    // fflush(stdout);
+    // tmp_dir_dirent_pointer = readdir(tp_dir);
+    // printf("\tL 8\n");
+    // fflush(stdout);
     //
-    // while((out_dir_dirent_pointer = readdir(out_dir)) != NULL) {
-    //   while((tmp_dir_dirent_pointer = readdir(tp_dir)) != NULL) {
+    // while(out_dir_dirent_pointer != NULL) {
+    //   printf("\tL 9\n");
+    //   fflush(stdout);
+    //   while(tmp_dir_dirent_pointer != NULL) {
+    //     printf("\tL 10\n");
+    //     fflush(stdout);
     //     // to check if two versions of the same file:
     //     // check if out_dir_dirent_pointer.d_name == tmp_dir_dirent_pointer.d_name
     //     // may need:
     //     // out_dir_dirent_pointer->d_name == tmp_dir_dirent_pointer->d_name
-    //     if (strcmp(out_dir_dirent_pointer->d_name, tmp_dir_dirent_pointer->d_name) == 0) {
+    //     if (is_same_file(out_dir_dirent_pointer->d_name, tmp_dir_dirent_pointer->d_name)) {
+    //       printf("\tL 11\n");
+    //       fflush(stdout);
     //       printf("\tthese files do have the same file path. \n");
-    //       // strcpy(output_dir_struct -> name, out_dir_dirent_pointer -> d_name);
-    //
-    //       // the stat struct for the output_dir:
-    //       struct stat output_dir_stat_struct;
-    //       output_dir_stat_struct = malloc(sizeof(struct stat)); // must then free this later
-    //
-    //       // the stat struct for the tmp_dir:
-    //       struct stat tmp_dir_stat_struct;
-    //       tmp_dir_stat_struct = malloc(sizeof(struct stat)); // must then free this later
-    //
-    //       for (int i = 0; i < ) {}
-    //
-    //       if (stat(output_dir_stat_struct -> st_smtime, &output_dir_stat_struct) == 0) {
-    //         if (stat(tmp_dir_stat_struct -> st_smtime, &tmp_dir_stat_struct) == 0) {}
-    //         // now we can read the stat() struct elems into our own struct
-    //         // find their modification times now
-    //
-    //       } else {
-    //         perror("could not stat \n");
-    //       }
-    //       continue;
-    //
-    //     } else { // they are different files
+    //     } else {
+    //       printf("\tL 12\n");
+    //       fflush(stdout);
     //       printf("\tthese files DO NOT have the same file path. \n");
-    //     }
-    //
-    //     if (strcmp(input_dir_name, "tmp_dir") == 0) {
-    //       // init this struct LINUX_DIR tmp_dir;
-    //       strcpy(tmp_dir -> name, tmp_dir_dirent_pointer -> d_name);
     //     }
     //
     //     break;
@@ -358,22 +248,15 @@ void merge_output_and_tmp(char **tarfile_names) { // must eventually take: "ntar
     //   break;
     // }
     //
+    // printf("\tL 13\n");
+    // fflush(stdout);
     // closedir(out_dir);
+    // printf("\tL 14\n");
+    // fflush(stdout);
     // closedir(tp_dir);
+    //
+    //
     // break;
-    //
-    // // do the merging here
-    //
-    // // tmp_dir = realloc(tmp_dir, sizeof make_a_temporary_dir(tarfile_names[i + 1]));
-    // // char *tmp_dir = make_a_temporary_dir(tarfile_names[i + 1]);
-    //
-    // // printf("Loc A \n");
-    // // tmp_dir = make_a_temporary_dir(tarfile_names[i + 1]);
-    // // if (output_dir == NULL) {
-    // //   printf("tmp_dir is NULL \n");
-    // // } else {
-    // //   printf("%s \n", tmp_dir);
-    // // }
   }
 }
 
@@ -430,14 +313,7 @@ int main(int argc, char* argv[]) {
   printf("\n");
 
   init_structs();
-  // printf("malloc() output_dir_file: \n");
-  // output_dir_file = malloc(sizeof(struct LINUX_FILE));
-  // printf("malloc() tmp_dir_file: \n");
-  // tmp_dir_file = malloc(sizeof(struct LINUX_FILE));
-  // printf("malloc() output_dir_struct: \n");
-  // output_dir_struct = malloc(sizeof(struct LINUX_DIR));
-  // printf("malloc() tmp_dir_struct: \n");
-  // tmp_dir_struct = malloc(sizeof(struct LINUX_DIR));
+
   printf("\n");
 
   if (argc < 3) {

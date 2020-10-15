@@ -1,49 +1,147 @@
 #include "mergetars.h"
 
-
 void init_structs() {
 
-  struct LINUX_FILE *output_dir_file = NULL;
-  output_dir_file = malloc(sizeof(struct LINUX_FILE));
+  struct LINUX_FILE *output_file_struct = NULL;
+  output_file_struct = malloc(sizeof(struct LINUX_FILE));
+  output_file_struct->file_path_name = malloc(sizeof(char*) * MAXPATHLEN);
+  output_file_struct->file_size = (long)malloc(sizeof(int)); // use long?
+  output_file_struct->file_mod_time = (long)malloc(sizeof(time_t)); // use time_t ??
+  output_file_struct->isdir = (bool)malloc(sizeof(bool));
 
-  // struct LINUX_FILE *output_dir_file = {
-  //   sub_file_path_name = NULL,
-  //   sub_file_size = 0,
-  //   sub_file_mod_time = 0
+  output_file_struct->file_path_name = NULL;
+  output_file_struct->file_size = 0;
+  output_file_struct->file_mod_time = 0;
+  output_file_struct->isdir = true;
+
+  struct LINUX_FILE *tmp_file_struct = NULL;
+  tmp_file_struct = malloc(sizeof(struct LINUX_FILE));
+  tmp_file_struct->file_path_name = malloc(sizeof(char*) * MAXPATHLEN);
+  tmp_file_struct->file_size = (long)malloc(sizeof(int)); // use long?
+  tmp_file_struct->file_mod_time = (long)malloc(sizeof(time_t));  // use time_t ??
+  tmp_file_struct->isdir = (bool)malloc(sizeof(bool));
+
+  tmp_file_struct->file_path_name = NULL;
+  tmp_file_struct->file_size = 0;
+  tmp_file_struct->file_mod_time = 0;
+  tmp_file_struct->isdir = true;
+
+
+  // struct LINUX_FILE {
+  //   char *file_path_name; // supposed to be a string
+  //   int file_size;
+  //   int file_mod_time;
+  //   bool isdir;
   // };
-
-  output_dir_file->sub_file_path_name = NULL;
-  output_dir_file->sub_file_size = 0;
-  output_dir_file->sub_file_mod_time = 0; // error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘->’ token
-
-  // LINUX_FILE *tmp_dir_file_pointer = &tmp_dir_file;
-  // LINUX_FILE tmp_dir_file = malloc(sizeof(struct file));
-  struct LINUX_FILE *tmp_dir_file = NULL;
-  tmp_dir_file = malloc(sizeof(struct LINUX_FILE));
-
-  tmp_dir_file->sub_file_path_name = NULL;
-  tmp_dir_file->sub_file_size = 0;
-  tmp_dir_file->sub_file_mod_time = 0;
+  // // the output_dir and tmp_dir struct pointers:
+  // extern struct LINUX_FILE *output_file_struct;
+  // extern struct LINUX_FILE *tmp_file_struct;
 
   // LINUX_DIR *output_dir_struct_pointer = &output_dir_struct;
   // LINUX_DIR output_dir_struct = malloc(sizeof(struct directory));
-  struct LINUX_DIR *output_dir_struct = NULL;
-  output_dir_struct = malloc(sizeof(struct LINUX_DIR));
-
-  output_dir_struct->name = NULL;
-  output_dir_struct->array_sub_files = NULL;
-  output_dir_struct->array_sub_dirs = NULL;
-
-  // LINUX_DIR *tmp_dir_struct_pointer = &tmp_dir_struct;
-  // LINUX_DIR tmp_dir_struct = malloc(sizeof(struct directory));
-  struct LINUX_DIR *tmp_dir_struct = NULL;
-  tmp_dir_struct = malloc(sizeof(struct LINUX_DIR));
-
-  // LINUX_DIR tmp_dir_struct = NULL;
-  tmp_dir_struct->name = NULL;
-  tmp_dir_struct->array_sub_files = NULL;
-  tmp_dir_struct->array_sub_dirs = NULL;
+  // struct LINUX_DIR *output_dir_struct = NULL;
+  // output_dir_struct = malloc(sizeof(struct LINUX_DIR));
+  // // point to the entire struct or no???
+  // output_dir_struct->array_sub_files = (struct file**)&output_dir_file;
+  //
+  // output_dir_struct->name = NULL;
+  // output_dir_struct->array_sub_files = NULL;
+  // output_dir_struct->array_sub_dirs = NULL;
+  //
+  // // LINUX_DIR *tmp_dir_struct_pointer = &tmp_dir_struct;
+  // // LINUX_DIR tmp_dir_struct = malloc(sizeof(struct directory));
+  // struct LINUX_DIR *tmp_dir_struct = NULL;
+  // tmp_dir_struct = malloc(sizeof(struct LINUX_DIR));
+  // tmp_dir_struct->array_sub_files = (struct file**)&tmp_dir_file;
+  //
+  // // LINUX_DIR tmp_dir_struct = NULL;
+  // tmp_dir_struct->name = NULL;
+  // tmp_dir_struct->array_sub_files = NULL;
+  // tmp_dir_struct->array_sub_dirs = NULL;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+// void init_structs() {
+//
+//   struct LINUX_FILE *output_dir_file = NULL;
+//   output_dir_file = malloc(sizeof(struct LINUX_FILE));
+//
+//   // struct LINUX_FILE {
+//   //   char *file_path_name;
+//   //   int file_size;
+//   //   int file_mod_time;
+//   //   bool isdir;
+//   // };
+//
+//   output_dir_file->sub_file_path_name = NULL;
+//   // for (int i = 0; i < MAXPATHLEN; ++i) {
+//   //   output_dir_file->sub_file_path_name[i] = '\0';
+//   // }
+//   output_dir_file->sub_file_size = 0;
+//   output_dir_file->sub_file_mod_time = 0; // error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘->’ token
+//
+//   // LINUX_FILE *tmp_dir_file_pointer = &tmp_dir_file;
+//   // LINUX_FILE tmp_dir_file = malloc(sizeof(struct file));
+//   struct LINUX_FILE *tmp_dir_file = NULL;
+//   tmp_dir_file = malloc(sizeof(struct LINUX_FILE));
+//
+//   tmp_dir_file->sub_file_path_name = NULL;
+//   // for (int j = 0; j < MAXPATHLEN; ++j) {
+//   //   tmp_dir_file->sub_file_path_name[j] = '\0';
+//   // }
+//   tmp_dir_file->sub_file_size = 0;
+//   tmp_dir_file->sub_file_mod_time = 0;
+//
+//   // LINUX_DIR *output_dir_struct_pointer = &output_dir_struct;
+//   // LINUX_DIR output_dir_struct = malloc(sizeof(struct directory));
+//   struct LINUX_DIR *output_dir_struct = NULL;
+//   output_dir_struct = malloc(sizeof(struct LINUX_DIR));
+//   // point to the entire struct or no???
+//   output_dir_struct->array_sub_files = (struct file**)&output_dir_file;
+//
+//   output_dir_struct->name = NULL;
+//   output_dir_struct->array_sub_files = NULL;
+//   output_dir_struct->array_sub_dirs = NULL;
+//
+//   // LINUX_DIR *tmp_dir_struct_pointer = &tmp_dir_struct;
+//   // LINUX_DIR tmp_dir_struct = malloc(sizeof(struct directory));
+//   struct LINUX_DIR *tmp_dir_struct = NULL;
+//   tmp_dir_struct = malloc(sizeof(struct LINUX_DIR));
+//   tmp_dir_struct->array_sub_files = (struct file**)&tmp_dir_file;
+//
+//   // LINUX_DIR tmp_dir_struct = NULL;
+//   tmp_dir_struct->name = NULL;
+//   tmp_dir_struct->array_sub_files = NULL;
+//   tmp_dir_struct->array_sub_dirs = NULL;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // // function to init the tar_file fields:

@@ -1,7 +1,7 @@
 #include "mergetars.h"
 
 // tarfile[] is an index into: extern char **tarfiles;
-char* make_a_temporary_dir(char *tarfile) {
+char* make_a_temporary_dir(char *tarfile) { 
 
   // tarfile_names = realloc(tarfile_names, ntarfiles * sizeof(tarfile_names[0]));
 
