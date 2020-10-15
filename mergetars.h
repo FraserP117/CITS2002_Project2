@@ -220,8 +220,6 @@ extern void expand_tarfile(char *input_tarfile_name, char *temporary_directory);
 extern void merge_output_and_tmp(char **tarfile_names);
 
 extern void store_dir_contents(char *input_dir_name);
-extern void init_structs();
-
 
 
 

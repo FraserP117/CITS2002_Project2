@@ -14,6 +14,35 @@ int ntarfiles = 0;
 // Within a directory
 int nsubfiles = 0;
 
+struct LINUX_FILE *output_file_struct = NULL;
+struct LINUX_FILE *tmp_file_struct = NULL;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // --------------------------------------------------------------------------------
 
 // void init_structs() {
@@ -61,34 +90,6 @@ int nsubfiles = 0;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // need a function to init all these structs:
 
 // // for the file struct - inside the dir struct:
@@ -128,37 +129,6 @@ int nsubfiles = 0;
 //   .sub_dir = NULL
 // };
 // LINUX_DIR *tmp_dir_pointer = &tmp_dir;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

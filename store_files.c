@@ -2,7 +2,6 @@
 // functions to read the contents of a directory into the "dir" struct; using the stat() and dirent structures.
 // these functions will read the contents of "output_dir" and "tmp_dir" into their respective LINUX_FILE structs.
 
-
 void store_dir_contents(char *input_dir_name) { // call this function on each of the char **tarfile_names
 
   // this is a pointer to a "dirent" structure representing a file in the input_dir directory
