@@ -8,7 +8,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include <sys/wait.h>
-#include <sys/param.h> // int MAXPATHLEN;
+#include <sys/param.h> // int MAXPATHLEN has a value of 1024 (bytes).
 
 #include <dirent.h>
 
@@ -16,176 +16,29 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-// int MAXPATHLEN has a value of 1024 (bytes).
-
-// tarfile stuff:
-// extern int nsubfiles;
-// extern int nfiles_in_tar_archive;   //do we still need this?
-
+extern int num_sub_files;
 extern int ntarfiles;
-
 extern char **tarfile_names; // pointer to an array of strings
 extern char *tmp_dir;
 extern char *output_dir;
 extern char *temporary_directory;
 
 struct LINUX_FILE {
-  char *file_path_name;
+  char *file_path_name; // first name is always the tmp dir for the tarfile
   int file_size;
   int file_mod_time; // type time_t ??
-  bool isdir;
+  int num_subfiles; // need this if using *next_file ???
+  bool isdir; // need this if using *next_file ?????
+
+  LINUX_FILE *next_file;
 };
 
 // the output_dir and tmp_dir struct pointers:
 extern struct LINUX_FILE *output_file_struct;
 extern struct LINUX_FILE *tmp_file_struct;
 
-/*
-struct for a directory that holds:
-  - the size of the Directory
-  - the path name of the directory
-  - the mod time of the directoy
-  - a pointer to a file_pointer contatining the struct for a sub directory in the curent directory.
-  - an array of "file" structs that hold:
-    - the pathname of the file
-    - the file size
-    - the mod time of the file
-    - a boolean variable that is "True" if the file is a directory
-*/
-
-
-// typedef struct {
-//
-//   char *sub_file_path_name;
-//   int sub_file_size;
-//   int sub_file_mod_time;
-//   bool isdir;
-//
-// } LINUX_FILE;
-//
-// // the structs:
-// typedef struct {
-//
-//   char *name;
-//   struct file **array_sub_files; // struct LINUX_FILE** **array_sub_files;
-//   struct directory **array_sub_dirs; // struct LINUX_DIR** **array_sub_dirs;
-//
-// } LINUX_DIR;
-
-
-// struct LINUX_FILE {
-//
-//   char *sub_file_path_name;
-//   // char sub_file_path_name[MAXPATHLEN];
-//   int sub_file_size;
-//   int sub_file_mod_time;
-//   // bool isdir;
-// };
-//
-// // the structs:
-// struct LINUX_DIR {
-//   char *name;
-//   struct file **array_sub_files; // struct LINUX_FILE** **array_sub_files;
-//   struct directory **array_sub_dirs; // struct LINUX_DIR** **array_sub_dirs;
-// };
-
-// must call readdir() for reading each file in the dir
-// call it once and the first file is read into the dirent struct ponter
-// call it again to read the next file
-
-
-
-// typedef struct file {
-//   char *path_name;
-//   int size;
-//   int mod_time;
-//
-//   // struct file *next_file;
-//
-//   // "sub_file" is a pointer to a list of LINUX_FILE structs
-//   // that reccord the info for the files inside the LINUX_FILE for "file".
-//   struct sub_file *file_ents;
-//
-// } LINUX_FILE;
-
-
-
-
-// the structs:
-// typedef struct {
-//
-//   char *name;
-//   LINUX_FILE file**;
-//   LINUX_DIR directory**;
-//
-// } LINUX_DIR;
-
-// typedef struct my_meme {
-//
-//   struct MEME_STRUCT **a_good_meme;
-//
-// } MEME_STRUCT;
-
-// // these are LINUX_DIR struct pointers to the files in the current directory
-// extern struct LINUX_FILE *output_dir_file;
-// extern struct LINUX_FILE *tmp_dir_file;
-
-// // the output_dir and tmp_dir struct pointers:
-// extern struct LINUX_DIR **output_dir_sub_dir_struct;
-// extern struct LINUX_DIR **tmp_dir_sub_dir_struct;
-
-// // these are LINUX_DIR struct pointers to the files in the current directory
-// extern struct LINUX_FILE **output_dir_sub_file;
-// extern struct LINUX_FILE **tmp_dir_sub_file;
-
-
-
-
-
-// these are LINUX_DIR struct pointers to the sub directories in the current directory
-// extern LINUX_DIR next_dir_in_output_dir_struct;
-// extern LINUX_DIR *array_of_output_dir_dir_pointer;
-//
-// extern LINUX_DIR next_dir_in_tmp_dir_struct;
-// extern LINUX_DIR *array_of_tmp_dir_dir_pointers;
-
-// these are LINUX_DIR struct pointers to the files in the current directory
-// extern LINUX_FILE *output_dir_file; // only declare a pointer to the struct not the struct itself
-// extern LINUX_FILE *tmp_dir_file;
-
-
-
-
-
-
-
-
-
-
-
-// extern struct LINUX_DIR sub_dir;
-// extern struct LINUX_DIR *sub_dir_pointer;
-
-// typedef struct file {
-//   char *path_name;
-//   int size;
-//   int mod_time;
-//
-//   // struct file *next_file;
-//
-//   // "sub_file" is a pointer to a list of LINUX_FILE structs
-//   // that reccord the info for the files inside the LINUX_FILE for "file".
-//   struct sub_file *file_ents;
-//
-// } LINUX_FILE;
-
-// extern INPUT_FILE *tar_files;
-// extern LINUX_FILE output_file;
-// extern LINUX_FILE tmp_file;
-
-
-
-// extern LINUX_FILE *tar_file_ptr;
+extern struct LINUX_FILE *next_file_struct_for_tmp;
+extern struct LINUX_FILE *next_file_struct_for_output;
 
 // input tarfile info:
 extern int tar_file_size;
@@ -218,37 +71,4 @@ extern char* make_a_temporary_dir(char *tarfile);
 // extern void merge_tar_archives(char **tarfile_names);
 extern void expand_tarfile(char *input_tarfile_name, char *temporary_directory);
 extern void merge_output_and_tmp(char **tarfile_names);
-
-extern void store_dir_contents(char *input_dir_name);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // initial structure contents:
-// extern struct all_tarfiles;
-// extern struct one_tarfile;
-// extern struct subfile;
-//
-// extern char file_path[MAXPATHLEN];
-// extern int file_size;
-// extern char mod_time[2];
-//
-// // final structure contents:
-// // add to list of questions
-// extern struct all_unique_tarfiles;
-// extern struct Unique_subfile;
-// extern struct Unique_subfile_file_info;
-//
-// extern char u_file_path[MAXPATHLEN];
-// extern int u_file_size;
-// extern char u_mod_time[2];
+extern void store_dir_contents(struct LINUX_FILE *input_file_struct, char *input_dir_name);

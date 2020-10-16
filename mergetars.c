@@ -1,12 +1,24 @@
 #include "mergetars.h"
 
-void init_structs(void) {
+struct LINUX_FILE {
+  char *file_path_name; // first name is always the tmp dir for the tarfile
+  int file_size;
+  int file_mod_time; // type time_t ??
+  int num_subfiles; // need this if using *next_file ???
+  bool isdir; // need this if using *next_file ?????
+
+  LINUX_FILE *next_file;
+};
+
+
+void init_structs(void) {                                                        // 1
 
   // struct LINUX_FILE *output_file_struct = NULL;
   output_file_struct = malloc(sizeof(struct LINUX_FILE));
   output_file_struct->file_path_name = malloc(sizeof(char*) * MAXPATHLEN);
   output_file_struct->file_size = 0;
   output_file_struct->file_mod_time = 0;
+  output_file_struct->num_subfiles = 0;
   output_file_struct->isdir = true;
 
   // struct LINUX_FILE *tmp_file_struct = NULL;
@@ -14,7 +26,24 @@ void init_structs(void) {
   tmp_file_struct->file_path_name = malloc(sizeof(char*) * MAXPATHLEN);
   tmp_file_struct->file_size = 0;
   tmp_file_struct->file_mod_time = 0;
+  tmp_file_struct->num_subfiles = 0;
   tmp_file_struct->isdir = true;
+
+  // next file in curr dir for output
+  next_file_struct_for_output = malloc(sizeof(struct LINUX_FILE));
+  next_file_struct_for_output->file_path_name = malloc(sizeof(char*) * MAXPATHLEN);
+  next_file_struct_for_output->file_size = 0;
+  next_file_struct_for_output->file_mod_time = 0;
+  next_file_struct->num_subfiles = 0;
+  next_file_struct_for_output->isdir = true;
+
+  // next file in curr dir for tmp
+  next_file_struct_for_tmp = malloc(sizeof(struct LINUX_FILE));
+  next_file_struct_for_tmp->file_path_name = malloc(sizeof(char*) * MAXPATHLEN);
+  next_file_struct_for_tmp->file_size = 0;
+  next_file_struct_for_tmp->file_mod_time = 0;
+  tmp_file_struct->num_subfiles = 0;
+  next_file_struct_for_tmp->isdir = true;
 }
 
 
